@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reconciliação Financeira</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Reconciliação Financeira</h1>
+        </header>
+
+        <div class="controls">
+            <div class="control-group">
+                <label for="month-select">Selecione o mês:</label>
+                <select id="month-select">
+                    <option value="">-- Selecione --</option>
+                </select>
+            </div>
+            <button id="consolidate-btn" disabled>Consolidar</button>
+        </div>
+
+        <div id="loading" class="loading hidden">
+            Processando...
+        </div>
+
+        <div id="results" class="results hidden">
+            <div class="summary">
+                <div class="summary-item">
+                    <span class="label">Total Divergente:</span>
+                    <span id="divergent-count" class="value">0</span>
+                </div>
+                <div class="summary-item">
+                    <span class="label">Soma dos Valores Divergentes:</span>
+                    <span id="divergent-sum" class="value">R$ 0,00</span>
+                </div>
+            </div>
+
+            <section class="table-section">
+                <div class="section-header">
+                    <h2>Transações Conciliadas</h2>
+                    <button id="toggle-matched-btn" class="toggle-btn">▼ Recolher</button>
+                </div>
+                <div id="matched-table-container" class="table-wrapper">
+                    <table id="matched-table">
+                        <thead>
+                            <tr>
+                                <th>Data Cartão</th>
+                                <th>Data App</th>
+                                <th>Descrição Cartão</th>
+                                <th>Descrição App</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="table-section">
+                <h2>Apenas no Cartão</h2>
+                <div class="table-wrapper">
+                    <table id="card-only-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section class="table-section">
+                <h2>Apenas no App</h2>
+                <div class="table-wrapper">
+                    <table id="app-only-table">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Descrição</th>
+                                <th>Valor</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <script type="module" src="src/main.js"></script>
+</body>
+</html>
