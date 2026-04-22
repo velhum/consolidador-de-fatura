@@ -25,31 +25,31 @@ function groupByAmount(transactions) {
 
 function matchTransactions(cardByAmount, appByAmount) {
     const results = [];
-    const matchedAppIds = new Set();
+    const matchedAppTxs = new Set();
     
     for (const [amount, cardTxs] of cardByAmount) {
         const appTxs = appByAmount.get(amount) || [];
         
         for (const cardTx of cardTxs) {
-            const availableAppTxs = filterUnmatched(appTxs, matchedAppIds);
+            const availableAppTxs = filterUnmatched(appTxs, matchedAppTxs);
             const match = findBestMatch(cardTx, availableAppTxs);
             
             if (match.app) {
-                matchedAppIds.add(createTransactionId(match.app));
+                matchedAppTxs.add(match.app);
             }
             
             results.push(match);
         }
     }
     
-    const unmatchedApp = findUnmatchedAppTransactions(appByAmount, matchedAppIds);
+    const unmatchedApp = findUnmatchedAppTransactions(appByAmount, matchedAppTxs);
     results.push(...unmatchedApp);
     
     return results;
 }
 
-function filterUnmatched(transactions, matchedIds) {
-    return transactions.filter(tx => !matchedIds.has(createTransactionId(tx)));
+function filterUnmatched(transactions, matchedTxs) {
+    return transactions.filter(tx => !matchedTxs.has(tx));
 }
 
 function createTransactionId(transaction) {
@@ -120,14 +120,12 @@ function selectBestCandidate(candidates) {
     });
 }
 
-function findUnmatchedAppTransactions(appByAmount, matchedIds) {
+function findUnmatchedAppTransactions(appByAmount, matchedTxs) {
     const unmatched = [];
     
     for (const appTxs of appByAmount.values()) {
         for (const appTx of appTxs) {
-            const id = createTransactionId(appTx);
-            
-            if (!matchedIds.has(id)) {
+            if (!matchedTxs.has(appTx)) {
                 unmatched.push({
                     card: null,
                     app: appTx,

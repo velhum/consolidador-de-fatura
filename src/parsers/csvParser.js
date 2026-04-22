@@ -40,7 +40,7 @@ function parseCsvLine(line) {
 }
 
 function parseAmount(amountString) {
-    const cleaned = amountString.replace(/[^\d.]/g, '');
+    const cleaned = amountString.replace(/[^\d.-]/g, '');
     const value = parseFloat(cleaned);
     return Math.round(value * 100);
 }

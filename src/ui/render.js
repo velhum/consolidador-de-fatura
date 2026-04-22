@@ -34,7 +34,7 @@ function calculateDivergent(matchResults) {
 }
 
 function isDivergent(match) {
-    return match.confidence === 'unmatched';
+    return (match.card && !match.app) || (!match.card && match.app);
 }
 
 function sumAmounts(matches) {
