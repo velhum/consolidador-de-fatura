@@ -39,10 +39,21 @@ function createAppTransaction(row) {
     
     return {
         source: 'app',
-        date: String(date),
+        date: formatExcelDate(date),
         description: String(description),
         amountInCents: parseAmount(amount)
     };
+}
+
+function formatExcelDate(value) {
+    if (typeof value === 'number') {
+        const excelDate = XLSX.SSF.parse_date_code(value);
+        const day = String(excelDate.d).padStart(2, '0');
+        const month = String(excelDate.m).padStart(2, '0');
+        const year = excelDate.y;
+        return `${day}/${month}/${year}`;
+    }
+    return String(value);
 }
 
 function parseAmount(value) {
