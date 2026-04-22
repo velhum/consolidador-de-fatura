@@ -88,7 +88,11 @@ function renderMatchedTable(matches) {
         return;
     }
     
-    for (const match of matches) {
+    const sortedMatches = [...matches].sort((a, b) => {
+        return new Date(a.card.date) - new Date(b.card.date);
+    });
+    
+    for (const match of sortedMatches) {
         const row = createMatchedRow(match);
         tbody.appendChild(row);
     }
@@ -103,7 +107,11 @@ function renderCardOnlyTable(matches) {
         return;
     }
     
-    for (const match of matches) {
+    const sortedMatches = [...matches].sort((a, b) => {
+        return new Date(a.card.date) - new Date(b.card.date);
+    });
+    
+    for (const match of sortedMatches) {
         const row = createTransactionRow(match.card);
         tbody.appendChild(row);
     }
@@ -118,7 +126,11 @@ function renderAppOnlyTable(matches) {
         return;
     }
     
-    for (const match of matches) {
+    const sortedMatches = [...matches].sort((a, b) => {
+        return new Date(a.app.date) - new Date(b.app.date);
+    });
+    
+    for (const match of sortedMatches) {
         const row = createTransactionRow(match.app);
         tbody.appendChild(row);
     }
