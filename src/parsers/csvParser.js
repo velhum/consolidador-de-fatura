@@ -16,7 +16,7 @@ function readFileAsText(file) {
 }
 
 function splitIntoLines(text) {
-    return text.split('\n').filter(line => line.trim());
+    return text.split(/\r?\n/).filter(line => line.trim());
 }
 
 function removeHeader(lines) {
@@ -35,12 +35,44 @@ function createCardTransaction(line) {
 }
 
 function parseCsvLine(line) {
-    const parts = line.split(',');
-    return parts.map(part => part.trim());
+    const fields = [];
+    let current = '';
+    let inQuotes = false;
+
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+
+        if (inQuotes) {
+            if (char === '"') {
+                if (i + 1 < line.length && line[i + 1] === '"') {
+                    current += '"';
+                    i++;
+                } else {
+                    inQuotes = false;
+                }
+            } else {
+                current += char;
+            }
+        } else {
+            if (char === '"') {
+                inQuotes = true;
+            } else if (char === ',') {
+                fields.push(current.trim());
+                current = '';
+            } else {
+                current += char;
+            }
+        }
+    }
+    fields.push(current.trim());
+
+    return fields;
 }
 
 function parseAmount(amountString) {
-    const cleaned = amountString.replace(/[^\d.-]/g, '');
+    const withoutThousands = amountString.replace(/\./g, '');
+    const withDotDecimal = withoutThousands.replace(',', '.');
+    const cleaned = withDotDecimal.replace(/[^\d.-]/g, '');
     const value = parseFloat(cleaned);
     return Math.round(value * 100);
 }
