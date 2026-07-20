@@ -1,10 +1,23 @@
 export function reconcile(cardTransactions, appTransactions) {
+    const filteredAppTransactions = filterAppTransactionsByCardDateRange(cardTransactions, appTransactions);
     const cardByAmount = groupByAmount(cardTransactions);
-    const appByAmount = groupByAmount(appTransactions);
+    const appByAmount = groupByAmount(filteredAppTransactions);
     
     const matchResults = matchTransactions(cardByAmount, appByAmount);
     
     return matchResults;
+}
+
+function filterAppTransactionsByCardDateRange(cardTransactions, appTransactions) {
+    if (cardTransactions.length === 0) {
+        return appTransactions;
+    }
+
+    const cardDates = cardTransactions.map(transaction => transaction.date);
+    const minDate = cardDates.reduce((earliest, current) => current < earliest ? current : earliest);
+    const maxDate = cardDates.reduce((latest, current) => current > latest ? current : latest);
+
+    return appTransactions.filter(transaction => transaction.date >= minDate && transaction.date <= maxDate);
 }
 
 function groupByAmount(transactions) {
